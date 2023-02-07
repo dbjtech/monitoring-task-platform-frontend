@@ -1,0 +1,13 @@
+{
+  "context": [
+    "/api/**",
+    "/socket.io/**",
+    "/file_download/**",
+    "/push/**"
+  ],
+  "ws": true,
+  "target": "https://zulinbao365.com",
+  "secure": false,
+  "changeOrigin": true,
+  "logLevel": "debug"
+}
