@@ -1,11 +1,17 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './index.css'
 import App from './App'
+import dayjs from 'dayjs'
+import 'dayjs/locale/zh'
+import duration from 'dayjs/plugin/duration'
+import { ProviderContext } from './ProviderContext'
+
+dayjs.extend(duration)
+dayjs.locale('zh')
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+
 root.render(
-	<React.StrictMode>
+	<ProviderContext>
 		<App />
-	</React.StrictMode>
+	</ProviderContext>
 )
