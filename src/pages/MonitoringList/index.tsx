@@ -1,23 +1,29 @@
 import { MonitorTask } from '@/services/monitor/monitor.model'
 import { getMonitorTask } from '@/services/monitor/monitor.service'
+import { SearchOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
 import { Button, Input, Table } from 'antd'
 import { useState } from 'react'
 import { MonitorAction, MonitorPage, MonitorTable } from './style'
 
 const { Column } = Table
-const { Search } = Input
 
 const MonitoringPage = () => {
 	const [taskList, setTaskList] = useState<MonitorTask[]>([])
+	const [tableList, setTableList] = useState<MonitorTask[]>([])
 
 	const { loading } = useRequest(getMonitorTask, {
 		onSuccess: (res: MonitorTask[]) => {
 			setTaskList(res)
+			setTableList(res)
 		}
 	})
 
-	const onSearch = () => {}
+	const onSearch = (e: any) => {
+		const searchValue = e.target.value
+		const filterValue = taskList.filter((item: MonitorTask) => item.taskName.includes(searchValue))
+		setTableList(filterValue)
+	}
 	const createTask = () => {}
 	const updateTask = () => {}
 	const deleteTask = () => {}
@@ -26,7 +32,7 @@ const MonitoringPage = () => {
 	return (
 		<MonitorPage>
 			<MonitorAction>
-				<Search placeholder='请输入任务名称' onSearch={onSearch} style={{ width: 300 }} />
+				<Input prefix={<SearchOutlined />} allowClear placeholder='请输入任务名称' onChange={onSearch} style={{ width: 300 }} />
 				<Button type='primary' onClick={createTask}>
 					创建任务
 				</Button>
@@ -34,7 +40,7 @@ const MonitoringPage = () => {
 			<MonitorTable>
 				<Table
 					rowKey='id'
-					dataSource={taskList}
+					dataSource={tableList}
 					loading={loading}
 					bordered
 					size='small'
