@@ -32,7 +32,13 @@ const MonitoringPage = () => {
 	return (
 		<MonitorPage>
 			<MonitorAction>
-				<Input prefix={<SearchOutlined />} allowClear placeholder='请输入任务名称' onChange={onSearch} style={{ width: 300 }} />
+				<Input
+					prefix={<SearchOutlined />}
+					allowClear
+					placeholder='请输入任务名称'
+					onChange={onSearch}
+					style={{ width: 300 }}
+				/>
 				<Button type='primary' onClick={createTask}>
 					创建任务
 				</Button>
