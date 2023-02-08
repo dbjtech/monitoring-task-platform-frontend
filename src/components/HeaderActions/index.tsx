@@ -15,6 +15,7 @@ const HeaderActions = () => {
 			content: '确认退出？',
 			onOk() {
 				logoutService().then(() => {
+					window.sessionStorage.removeItem('mtsToken')
 					navigate('/entrance/login')
 				})
 			}

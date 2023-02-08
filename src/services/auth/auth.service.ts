@@ -4,7 +4,7 @@ import request from '@/services/request'
 // import md5 from 'blueimp-md5'
 
 export async function login(data: LoginData): Promise<LoginRes> {
-	return request.post(ApiAddress.LOGIN, data)
+	return request.post(ApiAddress.LOGIN, data, { headers: { 'Content-Type': 'multipart/form-data' } })
 }
 
 export function logout() {

@@ -3,6 +3,9 @@
     "/api/**",
     "/file_download/**"
   ],
+  "pathRewrite": {
+    "/api/v1": ""
+  },
   "ws": true,
   "target": "http://114.215.24.131:8035",
   "secure": false,

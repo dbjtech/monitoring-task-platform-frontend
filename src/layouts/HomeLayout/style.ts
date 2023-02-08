@@ -6,7 +6,7 @@ export const HomeHeader = styled.div`
 	height: ${headerHeight}px;
 	line-height: ${headerHeight}px;
 	width: 100%;
-	background: #287ed8;
+	background: #1677ff;
 	color: #fff;
 	position: relative;
 	z-index: 10;

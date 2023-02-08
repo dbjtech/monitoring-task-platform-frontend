@@ -34,7 +34,7 @@ const REST_PARAMS = /(:[^/]+)/g
 request.interceptors.request.use(
 	config => {
 		NProgress.start()
-		const token = window.sessionStorage.getItem('token') || ''
+		const token = window.sessionStorage.getItem('mtsToken') || ''
 		const matched = config.url?.match(REST_PARAMS)
 		const params = config.params
 		config.headers.Authorization = token
@@ -63,7 +63,7 @@ request.interceptors.request.use(
 request.interceptors.response.use(
 	res => {
 		NProgress.done()
-		if (res.headers['content-type'].includes('application/force-download')) {
+		if (res.headers['content-type']?.includes('application/force-download')) {
 			window.open(res.request.responseURL)
 			return Promise.resolve(res.data)
 		}

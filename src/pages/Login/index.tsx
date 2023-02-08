@@ -14,7 +14,7 @@ const LoginPage = () => {
 	const { loading, run } = useRequest(login, {
 		manual: true,
 		onSuccess: (res: LoginRes) => {
-			window.sessionStorage.setItem('token', res.token || '')
+			window.sessionStorage.setItem('mtsToken', res.token || '')
 			navigate('/')
 		}
 	})
