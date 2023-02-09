@@ -15,8 +15,6 @@ const MonitoringPage = () => {
 	const terminalsModalRef = useRef<TerminalsModalRef | null>(null)
 	const [taskList, setTaskList] = useState<MonitorTask[]>([])
 	const [tableList, setTableList] = useState<MonitorTask[]>([])
-	const [currentEmails, setCurrentEmails] = useState<string>("")
-	const [currentTaskId, setCurrentTaskId] = useState<number>(0)
 
 	const { loading, run } = useRequest(getMonitorTask, {
 		onSuccess: (res: MonitorTask[]) => {
@@ -44,11 +42,11 @@ const MonitoringPage = () => {
 		})
 	}
 	const showAddressee = (row: MonitorTask) => {
-		setCurrentEmails(row.emails)
+		addresseeModalRef.current?.renderList(row.emails)
 		addresseeModalRef.current?.showModal(true)
 	}
 	const showTerminals = (row: MonitorTask) => {
-		setCurrentTaskId(row.id)
+		terminalsModalRef.current?.queryTaskId(row.id)
 		terminalsModalRef.current?.showModal(true)
 	}
 
@@ -108,8 +106,8 @@ const MonitoringPage = () => {
 					/>
 				</Table>
 			</MonitorTable>
-			<AddresseeModal ref={addresseeModalRef} emails={currentEmails} />
-			<TerminalsModal ref={terminalsModalRef} taskId={currentTaskId} />
+			<AddresseeModal ref={addresseeModalRef} />
+			<TerminalsModal ref={terminalsModalRef} />
 		</MonitorPage>
 	)
 }

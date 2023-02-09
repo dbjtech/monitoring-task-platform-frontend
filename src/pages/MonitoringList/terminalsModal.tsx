@@ -9,17 +9,14 @@ import { useState, memo, useImperativeHandle, forwardRef } from "react"
 
 const { Column } = Table
 
-export interface TerminalsModalProps {
-	taskId: number
-}
-
 export interface TerminalsModalRef {
 	showModal: (isShow: boolean) => void
+	queryTaskId: (taskId: number) => void
 }
 
 const TerminalsModal = memo(
-	forwardRef((props: TerminalsModalProps, ref: React.ForwardedRef<TerminalsModalRef>) => {
-		const { taskId } = props
+	forwardRef((props: React.PropsWithChildren, ref: React.ForwardedRef<TerminalsModalRef>) => {
+		const [taskId, setTaskId] = useState<number>(0)
 		const [isShow, setIsShow] = useState<boolean>(false)
 		const [tableList, setTableList] = useState<MonitorTaskTerminals[]>([])
 		const [keyword, setKeyword] = useState<string>("")
@@ -47,6 +44,9 @@ const TerminalsModal = memo(
 		useImperativeHandle(ref, () => ({
 			showModal: (isShow: boolean) => {
 				setIsShow(isShow)
+			},
+			queryTaskId: (taskId: number) => {
+				setTaskId(taskId)
 			}
 		}))
 

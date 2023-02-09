@@ -1,35 +1,37 @@
 import { Modal, Table } from "antd"
-import { useState, useMemo, memo, useImperativeHandle, forwardRef } from "react"
+import { useState, memo, useImperativeHandle, forwardRef } from "react"
 
 const { Column } = Table
 
-export interface AddresseeModalProps {
-	emails: string
+interface AddresseeData {
+	id: number
+	email: string
 }
 
 export interface AddresseeModalRef {
 	showModal: (isShow: boolean) => void
+	renderList: (emails: string) => void
 }
 
 const AddresseeModal = memo(
-	forwardRef((props: AddresseeModalProps, ref: React.ForwardedRef<AddresseeModalRef>) => {
-		const { emails } = props
+	forwardRef((props: React.PropsWithChildren, ref: React.ForwardedRef<AddresseeModalRef>) => {
 		const [isShow, setIsShow] = useState<boolean>(false)
-
-		const list = useMemo(() => {
-			return emails
-				? emails.split(",").map((item: string, index: number) => {
-						return {
-							id: index,
-							email: item
-						}
-				  })
-				: []
-		}, [emails])
+		const [list, setList] = useState<AddresseeData[]>([])
 
 		useImperativeHandle(ref, () => ({
 			showModal: (isShow: boolean) => {
 				setIsShow(isShow)
+			},
+			renderList: (emails: string) => {
+				const listData = emails
+					? emails.split(",").map((item: string, index: number) => {
+							return {
+								id: index,
+								email: item
+							}
+					  })
+					: []
+				setList(listData)
 			}
 		}))
 
