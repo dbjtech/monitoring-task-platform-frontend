@@ -1,33 +1,56 @@
-import { MonitorTask } from '@/services/monitor/monitor.model'
-import { getMonitorTask } from '@/services/monitor/monitor.service'
-import { SearchOutlined } from '@ant-design/icons'
-import { useRequest } from 'ahooks'
-import { Button, Input, Table } from 'antd'
-import { useState } from 'react'
-import { MonitorAction, MonitorPage, MonitorTable } from './style'
+import { MonitorTask } from "@/services/monitor/monitor.model"
+import { deleteMonitorTask, getMonitorTask } from "@/services/monitor/monitor.service"
+import { DeleteOutlined, SearchOutlined } from "@ant-design/icons"
+import { useRequest } from "ahooks"
+import { Button, Input, Modal, Table } from "antd"
+import { useState, useRef } from "react"
+import AddresseeModal, { AddresseeModalRef } from "./addresseeModal"
+import { MonitorAction, MonitorPage, MonitorTable } from "./style"
+import TerminalsModal, { TerminalsModalRef } from "./terminalsModal"
 
 const { Column } = Table
 
 const MonitoringPage = () => {
+	const addresseeModalRef = useRef<AddresseeModalRef | null>(null)
+	const terminalsModalRef = useRef<TerminalsModalRef | null>(null)
 	const [taskList, setTaskList] = useState<MonitorTask[]>([])
 	const [tableList, setTableList] = useState<MonitorTask[]>([])
+	const [currentEmails, setCurrentEmails] = useState<string>("")
+	const [currentTaskId, setCurrentTaskId] = useState<number>(0)
 
-	const { loading } = useRequest(getMonitorTask, {
+	const { loading, run } = useRequest(getMonitorTask, {
 		onSuccess: (res: MonitorTask[]) => {
 			setTaskList(res)
 			setTableList(res)
 		}
 	})
-
 	const onSearch = (e: any) => {
 		const searchValue = e.target.value
 		const filterValue = taskList.filter((item: MonitorTask) => item.taskName.includes(searchValue))
 		setTableList(filterValue)
 	}
 	const createTask = () => {}
-	const updateTask = () => {}
-	const deleteTask = () => {}
-	const updateTerminals = () => {}
+	const updateTask = (row: MonitorTask) => {}
+	const deleteTask = (row: MonitorTask) => {
+		Modal.confirm({
+			title: "删除任务",
+			icon: <DeleteOutlined />,
+			content: "确认要删除该条监控任务吗？",
+			onOk() {
+				deleteMonitorTask(row.id).then(() => {
+					run()
+				})
+			}
+		})
+	}
+	const showAddressee = (row: MonitorTask) => {
+		setCurrentEmails(row.emails)
+		addresseeModalRef.current?.showModal(true)
+	}
+	const showTerminals = (row: MonitorTask) => {
+		setCurrentTaskId(row.id)
+		terminalsModalRef.current?.showModal(true)
+	}
 
 	return (
 		<MonitorPage>
@@ -53,21 +76,31 @@ const MonitoringPage = () => {
 					pagination={{ pageSize: 10, showSizeChanger: false }}
 				>
 					<Column title='名称' dataIndex='taskName' key='taskName' align='center' />
-					<Column title='收件人数' dataIndex='emailCounts' key='emailCounts' align='center' />
-					<Column title='监控设备数' dataIndex='terminalCounts' key='terminalCounts' align='center' />
+					<Column
+						title='收件人数'
+						dataIndex='emailCounts'
+						key='emailCounts'
+						align='center'
+						render={(text: string, row: MonitorTask) => <a onClick={() => showAddressee(row)}>{text}</a>}
+					/>
+					<Column
+						title='监控设备数'
+						dataIndex='terminalCounts'
+						key='terminalCounts'
+						align='center'
+						render={(text: string, row: MonitorTask) => <a onClick={() => showTerminals(row)}>{text}</a>}
+					/>
+					<Column title='管理员' dataIndex='adminName' key='adminName' align='center' />
 					<Column title='创建时间' dataIndex='createTime' key='createTime' align='center' />
 					<Column
 						title='操作'
-						render={data => (
+						render={(text: string, row: MonitorTask) => (
 							<>
-								<a onClick={updateTask} className='ml-2'>
+								<a onClick={() => updateTask(row)} className='ml-2'>
 									修改
 								</a>
-								<a onClick={deleteTask} className='ml-2'>
+								<a onClick={() => deleteTask(row)} className='ml-2'>
 									删除
-								</a>
-								<a onClick={updateTerminals} className='ml-2'>
-									更新设备
 								</a>
 							</>
 						)}
@@ -75,6 +108,8 @@ const MonitoringPage = () => {
 					/>
 				</Table>
 			</MonitorTable>
+			<AddresseeModal ref={addresseeModalRef} emails={currentEmails} />
+			<TerminalsModal ref={terminalsModalRef} taskId={currentTaskId} />
 		</MonitorPage>
 	)
 }
