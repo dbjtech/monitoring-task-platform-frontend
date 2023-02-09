@@ -5,12 +5,15 @@ export interface MonitorTask {
 	terminalCounts: number
 	createTime: number
 	emails: string
+	adminName: string
 }
 
 export interface MonitorTaskParams {
+	taskId?: number
 	taskName: string
-	terminalFile: File
-	emails?: string
+	terminalFile?: File
+	emails: string
+	adminName: string
 }
 
 export interface MonitorTerminalsParams {

@@ -39,9 +39,6 @@ const AddresseeModal = memo(
 			<Modal
 				open={isShow}
 				title='邮件接收人'
-				closable
-				mask
-				maskClosable
 				footer={<></>}
 				onCancel={() => {
 					setIsShow(false)

@@ -55,9 +55,6 @@ const TerminalsModal = memo(
 				open={isShow}
 				width={1000}
 				title='设备详情'
-				closable
-				mask
-				maskClosable
 				footer={<></>}
 				onCancel={() => {
 					setIsShow(false)

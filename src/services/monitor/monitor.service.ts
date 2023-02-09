@@ -15,6 +15,10 @@ export function addMonitorTask(data: MonitorTaskParams): Promise<MonitorTask[]> 
 	return request.post(ApiAddress.MONITOR_TASK, data)
 }
 
+export function updateMonitorTask(params: MonitorTaskParams): Promise<MonitorTask[]> {
+	return request.put(ApiAddress.MONITOR_TASK, null, { params: params })
+}
+
 export function deleteMonitorTask(id: number): Promise<MonitorTask[]> {
 	return request.delete(ApiAddress.MONITOR_TASK, { params: { id } })
 }

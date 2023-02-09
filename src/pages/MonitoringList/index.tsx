@@ -5,6 +5,7 @@ import { useRequest } from "ahooks"
 import { Button, Input, Modal, Table } from "antd"
 import { useState, useRef } from "react"
 import AddresseeModal, { AddresseeModalRef } from "./addresseeModal"
+import MonitorTaskModal, { MonitorTaskModalRef } from "./monitorTaskModal"
 import { MonitorAction, MonitorPage, MonitorTable } from "./style"
 import TerminalsModal, { TerminalsModalRef } from "./terminalsModal"
 
@@ -13,6 +14,7 @@ const { Column } = Table
 const MonitoringPage = () => {
 	const addresseeModalRef = useRef<AddresseeModalRef | null>(null)
 	const terminalsModalRef = useRef<TerminalsModalRef | null>(null)
+	const monitorTaskModalRef = useRef<MonitorTaskModalRef | null>(null)
 	const [taskList, setTaskList] = useState<MonitorTask[]>([])
 	const [tableList, setTableList] = useState<MonitorTask[]>([])
 
@@ -27,8 +29,18 @@ const MonitoringPage = () => {
 		const filterValue = taskList.filter((item: MonitorTask) => item.taskName.includes(searchValue))
 		setTableList(filterValue)
 	}
-	const createTask = () => {}
-	const updateTask = (row: MonitorTask) => {}
+	const createTask = () => {
+		monitorTaskModalRef.current?.showModal(true)
+	}
+	const updateTask = (row: MonitorTask) => {
+		const initData = {
+			taskId: row.id,
+			taskName: row.taskName,
+			emails: row.emails,
+			adminName: row.adminName
+		}
+		monitorTaskModalRef.current?.showModal(true, initData)
+	}
 	const deleteTask = (row: MonitorTask) => {
 		Modal.confirm({
 			title: "删除任务",
@@ -108,6 +120,7 @@ const MonitoringPage = () => {
 			</MonitorTable>
 			<AddresseeModal ref={addresseeModalRef} />
 			<TerminalsModal ref={terminalsModalRef} />
+			<MonitorTaskModal ref={monitorTaskModalRef} />
 		</MonitorPage>
 	)
 }
