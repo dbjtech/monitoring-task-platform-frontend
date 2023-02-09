@@ -126,14 +126,14 @@ const TerminalsModal = memo(
 						dataIndex='networkProtocol'
 						key='networkProtocol'
 						align='center'
-						render={(text: number) => <span>{NetworkProtocol[text]}</span>}
+						render={(text: number) => <span>{NetworkProtocol[text] || "-"}</span>}
 					/>
 					<Column
 						title='在线状态'
 						dataIndex='login'
 						key='login'
 						align='center'
-						render={(text: number) => <span>{LoginStatus[text]}</span>}
+						render={(text: number) => <span>{LoginStatus[text] || "-"}</span>}
 					/>
 					<Column
 						title='激活日期'
