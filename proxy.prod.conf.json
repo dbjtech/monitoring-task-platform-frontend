@@ -4,7 +4,7 @@
     "/file_download/**"
   ],
   "ws": true,
-  "target": "https://zulinbao365.com",
+  "target": "http://114.215.24.131:8035",
   "secure": false,
   "changeOrigin": true,
   "logLevel": "debug"

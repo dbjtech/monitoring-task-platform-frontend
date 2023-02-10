@@ -1,9 +1,12 @@
+import { useAppDispatch } from "@/hooks/reduxHooks"
 import { MonitorTask, MonitorTaskParams } from "@/services/monitor/monitor.model"
 import { addMonitorTask, updateMonitorTask } from "@/services/monitor/monitor.service"
+import { getMonitorTaskThunk } from "@/store/monitor/monitor.slice"
 import { UploadOutlined } from "@ant-design/icons"
 import { useRequest } from "ahooks"
 import { Button, Form, Input, Modal, Upload } from "antd"
 import { useState, memo, useImperativeHandle, forwardRef } from "react"
+import { Tips, TipsTitle } from "./style"
 
 export interface MonitorTaskModalRef {
 	showModal: (isShow: boolean, initData?: MonitorTaskParams) => void
@@ -12,20 +15,23 @@ export interface MonitorTaskModalRef {
 const MonitorTaskModal = memo(
 	forwardRef((props: React.PropsWithChildren, ref: React.ForwardedRef<MonitorTaskModalRef>) => {
 		const [form] = Form.useForm()
+		const dispatch = useAppDispatch()
 		const [isShow, setIsShow] = useState<boolean>(false)
 		const [updateId, setUpdateId] = useState<number>(0)
 
 		const { loading: addLoading, run: runCreate } = useRequest(addMonitorTask, {
 			manual: true,
 			onSuccess: (data: MonitorTask[]) => {
-				console.log(data)
+				resetModal()
+				dispatch(getMonitorTaskThunk())
 			}
 		})
 
 		const { loading: creatLoading, run: runUpdate } = useRequest(updateMonitorTask, {
 			manual: true,
 			onSuccess: (data: MonitorTask[]) => {
-				console.log(data)
+				resetModal()
+				dispatch(getMonitorTaskThunk())
 			}
 		})
 
@@ -42,6 +48,11 @@ const MonitorTaskModal = memo(
 			return e && e.fileList
 		}
 
+		const resetModal = () => {
+			setIsShow(false)
+			form.resetFields()
+		}
+
 		const submitForm = () => {
 			form
 				.validateFields()
@@ -49,7 +60,10 @@ const MonitorTaskModal = memo(
 					const params = {
 						...values
 					}
-					updateId ? runUpdate({ ...params, taskId: updateId }) : runCreate(params)
+					if (values.terminalFile) {
+						params.terminalFile = values.terminalFile[0].originFileObj
+					}
+					updateId ? runUpdate(params, updateId) : runCreate(params)
 				})
 				.catch(() => {})
 		}
@@ -71,10 +85,7 @@ const MonitorTaskModal = memo(
 				closable={false}
 				confirmLoading={addLoading || creatLoading}
 				onOk={submitForm}
-				onCancel={() => {
-					setIsShow(false)
-					form.resetFields()
-				}}
+				onCancel={resetModal}
 			>
 				<Form form={form} layout='vertical'>
 					<Form.Item
@@ -101,23 +112,25 @@ const MonitorTaskModal = memo(
 					>
 						<Input size='large' type='emails' placeholder='如有多个邮箱中间用英文逗号","隔开' />
 					</Form.Item>
-					{updateId ? (
-						<></>
-					) : (
-						<Form.Item
-							required
-							rules={[{ required: true, message: "请上传监控设备表" }]}
-							valuePropName='fileList'
-							getValueFromEvent={normFile}
-							label='邮件接收人'
-							name='terminalFile'
-						>
-							<Upload maxCount={1} accept='.xls,.xlsx' beforeUpload={uploadExcel}>
-								<Button icon={<UploadOutlined />}>上传设备</Button>
-							</Upload>
-						</Form.Item>
-					)}
+					<Form.Item
+						required={updateId ? false : true}
+						rules={updateId ? [] : [{ required: true, message: "请上传监控设备表" }]}
+						valuePropName='fileList'
+						getValueFromEvent={normFile}
+						label='邮件接收人'
+						name='terminalFile'
+					>
+						<Upload maxCount={1} accept='.xls,.xlsx' beforeUpload={uploadExcel}>
+							<Button icon={<UploadOutlined />}>上传设备</Button>
+						</Upload>
+					</Form.Item>
 				</Form>
+				<Tips>
+					<TipsTitle>*注意*</TipsTitle>：创建任务后请及时做数据转发配置
+					<a href='#' target='_blank'>
+						参考手册
+					</a>
+				</Tips>
 			</Modal>
 		)
 	})

@@ -12,15 +12,32 @@ export function getMonitorTask(): Promise<MonitorTask[]> {
 }
 
 export function addMonitorTask(data: MonitorTaskParams): Promise<MonitorTask[]> {
-	return request.post(ApiAddress.MONITOR_TASK, data)
+	const formData = new FormData()
+	formData.append("terminalFile", data.terminalFile!)
+	formData.append("taskName", data.taskName)
+	formData.append("emails", data.emails)
+	formData.append("adminName", data.adminName)
+	return request.post(ApiAddress.MONITOR_TASK, formData, {
+		headers: { "Content-Type": "multipart/form-data" }
+	})
 }
 
-export function updateMonitorTask(params: MonitorTaskParams): Promise<MonitorTask[]> {
-	return request.put(ApiAddress.MONITOR_TASK, null, { params: params })
+export function updateMonitorTask(data: MonitorTaskParams, taskId: number): Promise<MonitorTask[]> {
+	const formData = new FormData()
+	data.terminalFile && formData.append("terminalFile", data.terminalFile)
+	formData.append("taskName", data.taskName)
+	formData.append("emails", data.emails)
+	formData.append("adminName", data.adminName)
+	console.log(data)
+
+	return request.put(ApiAddress.MONITOR_TASK_ACTION, formData, {
+		params: { id: taskId },
+		headers: { "Content-Type": "multipart/form-data" }
+	})
 }
 
 export function deleteMonitorTask(id: number): Promise<MonitorTask[]> {
-	return request.delete(ApiAddress.MONITOR_TASK, { params: { id } })
+	return request.delete(ApiAddress.MONITOR_TASK_ACTION, { params: { id } })
 }
 
 export function getMonitorTaskTerminals(params: MonitorTerminalsParams): Promise<MonitorTaskTerminalsRes> {

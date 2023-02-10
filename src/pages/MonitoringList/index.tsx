@@ -1,9 +1,11 @@
+import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks"
 import { MonitorTask } from "@/services/monitor/monitor.model"
-import { deleteMonitorTask, getMonitorTask } from "@/services/monitor/monitor.service"
+import { deleteMonitorTask } from "@/services/monitor/monitor.service"
+import { getMonitorTaskThunk, selectMonitorStore } from "@/store/monitor/monitor.slice"
+import { dateFormat } from "@/utils/utils"
 import { DeleteOutlined, SearchOutlined } from "@ant-design/icons"
-import { useRequest } from "ahooks"
 import { Button, Input, Modal, Table } from "antd"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import AddresseeModal, { AddresseeModalRef } from "./addresseeModal"
 import MonitorTaskModal, { MonitorTaskModalRef } from "./monitorTaskModal"
 import { MonitorAction, MonitorPage, MonitorTable } from "./style"
@@ -12,21 +14,16 @@ import TerminalsModal, { TerminalsModalRef } from "./terminalsModal"
 const { Column } = Table
 
 const MonitoringPage = () => {
+	const dispatch = useAppDispatch()
+	const { monitorTaskList } = useAppSelector(selectMonitorStore)
 	const addresseeModalRef = useRef<AddresseeModalRef | null>(null)
 	const terminalsModalRef = useRef<TerminalsModalRef | null>(null)
 	const monitorTaskModalRef = useRef<MonitorTaskModalRef | null>(null)
-	const [taskList, setTaskList] = useState<MonitorTask[]>([])
 	const [tableList, setTableList] = useState<MonitorTask[]>([])
 
-	const { loading, run } = useRequest(getMonitorTask, {
-		onSuccess: (res: MonitorTask[]) => {
-			setTaskList(res)
-			setTableList(res)
-		}
-	})
 	const onSearch = (e: any) => {
 		const searchValue = e.target.value
-		const filterValue = taskList.filter((item: MonitorTask) => item.taskName.includes(searchValue))
+		const filterValue = monitorTaskList.filter((item: MonitorTask) => item.taskName.includes(searchValue))
 		setTableList(filterValue)
 	}
 	const createTask = () => {
@@ -48,7 +45,7 @@ const MonitoringPage = () => {
 			content: "确认要删除该条监控任务吗？",
 			onOk() {
 				deleteMonitorTask(row.id).then(() => {
-					run()
+					dispatch(getMonitorTaskThunk())
 				})
 			}
 		})
@@ -61,6 +58,12 @@ const MonitoringPage = () => {
 		terminalsModalRef.current?.queryTaskId(row.id)
 		terminalsModalRef.current?.showModal(true)
 	}
+	useEffect(() => {
+		setTableList(monitorTaskList)
+	}, [monitorTaskList])
+	useEffect(() => {
+		dispatch(getMonitorTaskThunk())
+	}, [])
 
 	return (
 		<MonitorPage>
@@ -80,7 +83,6 @@ const MonitoringPage = () => {
 				<Table
 					rowKey='id'
 					dataSource={tableList}
-					loading={loading}
 					bordered
 					size='small'
 					pagination={{ pageSize: 10, showSizeChanger: false }}
@@ -101,7 +103,13 @@ const MonitoringPage = () => {
 						render={(text: string, row: MonitorTask) => <a onClick={() => showTerminals(row)}>{text}</a>}
 					/>
 					<Column title='管理员' dataIndex='adminName' key='adminName' align='center' />
-					<Column title='创建时间' dataIndex='createTime' key='createTime' align='center' />
+					<Column
+						title='创建时间'
+						dataIndex='createTime'
+						key='createTime'
+						align='center'
+						render={(text: number) => <span>{dateFormat(text)}</span>}
+					/>
 					<Column
 						title='操作'
 						render={(text: string, row: MonitorTask) => (

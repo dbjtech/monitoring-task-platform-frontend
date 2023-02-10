@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import styled from "@emotion/styled"
 
 export const MonitorAction = styled.div`
 	width: 100%;
@@ -14,4 +14,12 @@ export const MonitorPage = styled.div`
 
 export const MonitorTable = styled.div`
 	padding: 20px;
+`
+
+export const Tips = styled.div`
+	font-weight: 700;
+`
+
+export const TipsTitle = styled.span`
+	color: red;
 `
