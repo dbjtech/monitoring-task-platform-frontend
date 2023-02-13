@@ -28,7 +28,6 @@ export function updateMonitorTask(data: MonitorTaskParams, taskId: number): Prom
 	formData.append("taskName", data.taskName)
 	formData.append("emails", data.emails)
 	formData.append("adminName", data.adminName)
-	console.log(data)
 
 	return request.put(ApiAddress.MONITOR_TASK_ACTION, formData, {
 		params: { id: taskId },
