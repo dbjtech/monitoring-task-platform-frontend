@@ -2,8 +2,10 @@ import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks"
 import { MonitorTask } from "@/services/monitor/monitor.model"
 import { deleteMonitorTask } from "@/services/monitor/monitor.service"
 import { getMonitorTaskThunk, selectMonitorStore } from "@/store/monitor/monitor.slice"
+import { APP_NAME } from "@/utils/constants"
 import { dateFormat } from "@/utils/utils"
 import { DeleteOutlined, SearchOutlined } from "@ant-design/icons"
+import { useTitle } from "ahooks"
 import { Button, Input, Modal, Table } from "antd"
 import { useState, useRef, useEffect } from "react"
 import AddresseeModal, { AddresseeModalRef } from "./addresseeModal"
@@ -14,6 +16,7 @@ import TerminalsModal, { TerminalsModalRef } from "./terminalsModal"
 const { Column } = Table
 
 const MonitoringPage = () => {
+	useTitle(`${APP_NAME}`)
 	const dispatch = useAppDispatch()
 	const { monitorTaskList } = useAppSelector(selectMonitorStore)
 	const addresseeModalRef = useRef<AddresseeModalRef | null>(null)
