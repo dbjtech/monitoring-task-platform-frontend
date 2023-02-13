@@ -141,15 +141,15 @@ const TerminalsModal = memo(
 					/>
 					<Column
 						title='上次定位时间'
-						dataIndex='timestamp'
-						key='timestamp'
+						dataIndex='locationTime'
+						key='locationTime'
 						align='center'
 						render={(text: number) => <span>{dateFormat(text)}</span>}
 					/>
 					<Column
 						title='最后通讯时间'
-						dataIndex='timestamp'
-						key='timestamp'
+						dataIndex='updateTime'
+						key='updateTime'
 						align='center'
 						render={(text: number) => <span>{dateFormat(text)}</span>}
 					/>

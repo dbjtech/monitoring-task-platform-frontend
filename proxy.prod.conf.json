@@ -4,7 +4,7 @@
     "/file_download/**"
   ],
   "ws": true,
-  "target": "http://114.215.24.131:8035",
+  "target": "http://fx.qijigps.com",
   "secure": false,
   "changeOrigin": true,
   "logLevel": "debug"

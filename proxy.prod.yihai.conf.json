@@ -4,9 +4,8 @@
     "/file_download/**"
   ],
   "ws": true,
-  "target": "http://fx-alpha.qijigps.com",
+  "target": "https://fx-local.qijigps.com",
   "secure": false,
   "changeOrigin": true,
   "logLevel": "debug"
 }
-

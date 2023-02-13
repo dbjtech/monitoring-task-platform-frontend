@@ -23,3 +23,8 @@ export const Tips = styled.div`
 export const TipsTitle = styled.span`
 	color: red;
 `
+
+export const ListTemplate = styled.div`
+	color: red;
+	font-weight: 700;
+`

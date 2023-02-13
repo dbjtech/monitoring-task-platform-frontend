@@ -6,7 +6,8 @@ import { UploadOutlined } from "@ant-design/icons"
 import { useRequest } from "ahooks"
 import { Button, Form, Input, Modal, Upload } from "antd"
 import { useState, memo, useImperativeHandle, forwardRef } from "react"
-import { Tips, TipsTitle } from "./style"
+import { ListTemplate, Tips, TipsTitle } from "./style"
+import ListTemplatePNG from "@/assets/images/monitor_template.png"
 
 export interface MonitorTaskModalRef {
 	showModal: (isShow: boolean, initData?: MonitorTaskParams) => void
@@ -117,7 +118,7 @@ const MonitorTaskModal = memo(
 						rules={updateId ? [] : [{ required: true, message: "请上传监控设备表" }]}
 						valuePropName='fileList'
 						getValueFromEvent={normFile}
-						label='邮件接收人'
+						label='设备列表'
 						name='terminalFile'
 					>
 						<Upload maxCount={1} accept='.xls,.xlsx' beforeUpload={uploadExcel}>
@@ -125,9 +126,11 @@ const MonitorTaskModal = memo(
 						</Upload>
 					</Form.Item>
 				</Form>
+				<ListTemplate>*文件模板*</ListTemplate>
+				<img src={ListTemplatePNG} alt='列表模板' />
 				<Tips>
 					<TipsTitle>*注意*</TipsTitle>：创建任务后请及时做数据转发配置
-					<a href='#' target='_blank'>
+					<a href='https://docs.qq.com/doc/DT0xmc0h1dnFyUllB?_t=1676259188748' target='_blank'>
 						参考手册
 					</a>
 				</Tips>
