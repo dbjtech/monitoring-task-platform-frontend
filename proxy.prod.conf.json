@@ -1,0 +1,11 @@
+{
+  "context": [
+    "/api/**",
+    "/file_download/**"
+  ],
+  "ws": true,
+  "target": "http://fx.qijigps.com",
+  "secure": false,
+  "changeOrigin": true,
+  "logLevel": "debug"
+}
