@@ -62,7 +62,7 @@ const MonitorTaskModal = memo(
 					const params = {
 						...values
 					}
-					values.pingInterval ? (values.pingInterval = pingInterval.toString()) : (values.pingInterval = "")
+					values.pingInterval ? (params.pingInterval = pingInterval.toString()) : (params.pingInterval = "")
 					if (values.terminalFile) {
 						params.terminalFile = values.terminalFile[0].originFileObj
 					}
@@ -130,8 +130,7 @@ const MonitorTaskModal = memo(
 					</Form.Item>
 					<Form.Item name='pingInterval' valuePropName='checked'>
 						<Checkbox>
-							{" "}
-							Ping终端周期{" "}
+							Ping终端周期
 							<InputNumber
 								value={pingInterval}
 								size='small'
@@ -139,7 +138,7 @@ const MonitorTaskModal = memo(
 								onChange={e => {
 									setPingInterval(e || 10)
 								}}
-							/>{" "}
+							/>
 							min （仅支持MQTT协议）
 						</Checkbox>
 					</Form.Item>
