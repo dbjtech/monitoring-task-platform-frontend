@@ -17,6 +17,7 @@ export function addMonitorTask(data: MonitorTaskParams): Promise<MonitorTask[]> 
 	formData.append("taskName", data.taskName)
 	formData.append("emails", data.emails)
 	formData.append("adminName", data.adminName)
+	formData.append("pingInterval", data.pingInterval)
 	return request.post(ApiAddress.MONITOR_TASK, formData, {
 		headers: { "Content-Type": "multipart/form-data" }
 	})
@@ -28,6 +29,7 @@ export function updateMonitorTask(data: MonitorTaskParams, taskId: number): Prom
 	formData.append("taskName", data.taskName)
 	formData.append("emails", data.emails)
 	formData.append("adminName", data.adminName)
+	formData.append("pingInterval", data.pingInterval)
 
 	return request.put(ApiAddress.MONITOR_TASK_ACTION, formData, {
 		params: { id: taskId },
