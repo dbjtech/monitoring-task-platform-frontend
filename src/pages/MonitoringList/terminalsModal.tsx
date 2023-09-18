@@ -95,28 +95,28 @@ const TerminalsModal = memo(
 						dataIndex='sn'
 						key='sn'
 						align='center'
-						render={(text: number) => <span>{text || "-"}</span>}
+						render={(text: string) => <span>{text || "-"}</span>}
 					/>
 					<Column
 						title='ICCID'
 						dataIndex='iccid'
 						key='iccid'
 						align='center'
-						render={(text: number) => <span>{text || "-"}</span>}
+						render={(text: string) => <span>{text || "-"}</span>}
 					/>
 					<Column
 						title='设备类型'
 						dataIndex='modelName'
 						key='modelName'
 						align='center'
-						render={(text: number) => <span>{text || "-"}</span>}
+						render={(text: string) => <span>{text || "-"}</span>}
 					/>
 					<Column
 						title='设备版本号'
 						dataIndex='version'
 						key='version'
 						align='center'
-						render={(text: number) => <span>{text || "-"}</span>}
+						render={(text: string) => <span>{text || "-"}</span>}
 					/>
 					<Column
 						title='通信协议'

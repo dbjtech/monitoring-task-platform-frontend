@@ -4,7 +4,7 @@ import { addMonitorTask, updateMonitorTask } from "@/services/monitor/monitor.se
 import { getMonitorTaskThunk } from "@/store/monitor/monitor.slice"
 import { UploadOutlined } from "@ant-design/icons"
 import { useRequest } from "ahooks"
-import { Button, Form, Input, Modal, Upload } from "antd"
+import { Button, Checkbox, Form, Input, InputNumber, Modal, Upload } from "antd"
 import { useState, memo, useImperativeHandle, forwardRef } from "react"
 import { ListTemplate, Tips, TipsTitle } from "./style"
 import ListTemplatePNG from "@/assets/images/monitor_template.png"
@@ -19,6 +19,7 @@ const MonitorTaskModal = memo(
 		const dispatch = useAppDispatch()
 		const [isShow, setIsShow] = useState<boolean>(false)
 		const [updateId, setUpdateId] = useState<number>(0)
+		const [pingInterval, setPingInterval] = useState<number>(30)
 
 		const { loading: addLoading, run: runCreate } = useRequest(addMonitorTask, {
 			manual: true,
@@ -61,6 +62,7 @@ const MonitorTaskModal = memo(
 					const params = {
 						...values
 					}
+					values.pingInterval ? (params.pingInterval = pingInterval.toString()) : (params.pingInterval = "")
 					if (values.terminalFile) {
 						params.terminalFile = values.terminalFile[0].originFileObj
 					}
@@ -73,7 +75,8 @@ const MonitorTaskModal = memo(
 			showModal: (isShow: boolean, initData?: MonitorTaskParams) => {
 				setIsShow(isShow)
 				setUpdateId(initData?.taskId || 0)
-				initData && form.setFieldsValue(initData)
+				initData && form.setFieldsValue({ ...initData, pingInterval: initData.pingInterval ? true : false })
+				setPingInterval(Number(initData?.pingInterval) || 30)
 			}
 		}))
 
@@ -124,6 +127,20 @@ const MonitorTaskModal = memo(
 						<Upload maxCount={1} accept='.xls,.xlsx' beforeUpload={uploadExcel}>
 							<Button icon={<UploadOutlined />}>上传设备</Button>
 						</Upload>
+					</Form.Item>
+					<Form.Item name='pingInterval' valuePropName='checked'>
+						<Checkbox>
+							Ping终端周期
+							<InputNumber
+								value={pingInterval}
+								size='small'
+								min={10}
+								onChange={e => {
+									setPingInterval(e || 10)
+								}}
+							/>
+							min （仅支持MQTT协议）
+						</Checkbox>
 					</Form.Item>
 				</Form>
 				<ListTemplate>*文件模板*</ListTemplate>

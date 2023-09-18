@@ -24,12 +24,15 @@ const AddresseeModal = memo(
 			},
 			renderList: (emails: string) => {
 				const listData = emails
-					? emails.split(",").map((item: string, index: number) => {
-							return {
-								id: index,
-								email: item
-							}
-					  })
+					? emails
+							.split(",")
+							.map((item: string, index: number) => {
+								return {
+									id: index + 1,
+									email: item
+								}
+							})
+							.filter(item => item.email)
 					: []
 				setList(listData)
 			}

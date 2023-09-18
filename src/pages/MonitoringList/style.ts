@@ -4,7 +4,7 @@ export const MonitorAction = styled.div`
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
-	align-item: center;
+	align-items: center;
 	padding: 10px 20px;
 `
 

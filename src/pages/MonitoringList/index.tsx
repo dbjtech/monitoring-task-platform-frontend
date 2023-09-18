@@ -37,7 +37,8 @@ const MonitoringPage = () => {
 			taskId: row.id,
 			taskName: row.taskName,
 			emails: row.emails,
-			adminName: row.adminName
+			adminName: row.adminName,
+			pingInterval: row.pingInterval
 		}
 		monitorTaskModalRef.current?.showModal(true, initData)
 	}
@@ -90,6 +91,7 @@ const MonitoringPage = () => {
 					size='small'
 					pagination={{ pageSize: 10, showSizeChanger: false }}
 				>
+					<Column title='ID' dataIndex='id' key='id' align='center' />
 					<Column title='名称' dataIndex='taskName' key='taskName' align='center' />
 					<Column
 						title='收件人数'
