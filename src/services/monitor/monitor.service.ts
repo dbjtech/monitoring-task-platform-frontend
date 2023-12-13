@@ -11,6 +11,10 @@ export function getMonitorTask(): Promise<MonitorTask[]> {
 	return request.get(ApiAddress.MONITOR_TASK)
 }
 
+export function downLoadMonitorTask(taskId: number) {
+	window.open("api/v1/monitor_task/export?taskId=" + taskId)
+}
+
 export function addMonitorTask(data: MonitorTaskParams): Promise<MonitorTask[]> {
 	const formData = new FormData()
 	formData.append("terminalFile", data.terminalFile!)

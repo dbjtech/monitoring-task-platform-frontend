@@ -10,7 +10,8 @@ export const ApiAddress: { [index: string]: string } = {
 	// 监控任务
 	MONITOR_TASK: "/monitor_task",
 	MONITOR_TASK_ACTION: "/monitor_task/:id",
-	MONITOR_TASK_TERMINALS: "/monitor_task/terminals"
+	MONITOR_TASK_TERMINALS: "/monitor_task/terminals",
+	MONITOR_TASK_DOWNLOAD: "/monitor_task/export"
 }
 
 Object.keys(ApiAddress).forEach(key => {

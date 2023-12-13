@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/reduxHooks"
 import { MonitorTask } from "@/services/monitor/monitor.model"
-import { deleteMonitorTask } from "@/services/monitor/monitor.service"
+import { deleteMonitorTask, downLoadMonitorTask } from "@/services/monitor/monitor.service"
 import { getMonitorTaskThunk, selectMonitorStore } from "@/store/monitor/monitor.slice"
 import { APP_NAME } from "@/utils/constants"
 import { dateFormat } from "@/utils/utils"
@@ -26,7 +26,9 @@ const MonitoringPage = () => {
 
 	const onSearch = (e: any) => {
 		const searchValue = e.target.value
-		const filterValue = monitorTaskList.filter((item: MonitorTask) => item.taskName.includes(searchValue))
+		const filterValue = monitorTaskList
+			.filter((item: MonitorTask) => item.taskName.includes(searchValue))
+			.sort((a, b) => a.id - b.id)
 		setTableList(filterValue)
 	}
 	const createTask = () => {
@@ -62,8 +64,14 @@ const MonitoringPage = () => {
 		terminalsModalRef.current?.queryTaskId(row.id)
 		terminalsModalRef.current?.showModal(true)
 	}
+	const downLoadTask = (row: MonitorTask) => {
+		downLoadMonitorTask(row.id)
+	}
+
 	useEffect(() => {
-		setTableList(monitorTaskList)
+		const sortItem = [...monitorTaskList]
+		sortItem.sort((a, b) => a.id - b.id)
+		setTableList(sortItem)
 	}, [monitorTaskList])
 	useEffect(() => {
 		dispatch(getMonitorTaskThunk())
@@ -116,6 +124,13 @@ const MonitoringPage = () => {
 						render={(text: number) => <span>{dateFormat(text)}</span>}
 					/>
 					<Column
+						title='修改时间'
+						dataIndex='updateTime'
+						key='updateTime'
+						align='center'
+						render={(text: number) => <span>{dateFormat(text)}</span>}
+					/>
+					<Column
 						title='操作'
 						render={(text: string, row: MonitorTask) => (
 							<>
@@ -124,6 +139,9 @@ const MonitoringPage = () => {
 								</a>
 								<a onClick={() => deleteTask(row)} className='ml-2'>
 									删除
+								</a>
+								<a onClick={() => downLoadTask(row)} className='ml-2'>
+									下载监控日志
 								</a>
 							</>
 						)}
