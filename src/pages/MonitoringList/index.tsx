@@ -40,7 +40,8 @@ const MonitoringPage = () => {
 			taskName: row.taskName,
 			emails: row.emails,
 			adminName: row.adminName,
-			pingInterval: row.pingInterval
+			pingInterval: row.pingInterval,
+			locationSwitchStatus: row.locationSwitchStatus
 		}
 		monitorTaskModalRef.current?.showModal(true, initData)
 	}

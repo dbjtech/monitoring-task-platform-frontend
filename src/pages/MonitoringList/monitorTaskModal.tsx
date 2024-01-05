@@ -4,7 +4,7 @@ import { addMonitorTask, updateMonitorTask } from "@/services/monitor/monitor.se
 import { getMonitorTaskThunk } from "@/store/monitor/monitor.slice"
 import { UploadOutlined } from "@ant-design/icons"
 import { useRequest } from "ahooks"
-import { Button, Checkbox, Form, Input, InputNumber, Modal, Upload } from "antd"
+import { Button, Checkbox, Form, Input, InputNumber, Modal, Switch, Upload } from "antd"
 import { useState, memo, useImperativeHandle, forwardRef } from "react"
 import { ListTemplate, Tips, TipsTitle } from "./style"
 import ListTemplatePNG from "@/assets/images/monitor_template.png"
@@ -62,6 +62,7 @@ const MonitorTaskModal = memo(
 					const params = {
 						...values
 					}
+					params.locationSwitchStatus = values.locationSwitchStatus ? 1 : 0
 					values.pingInterval ? (params.pingInterval = pingInterval.toString()) : (params.pingInterval = "")
 					if (values.terminalFile) {
 						params.terminalFile = values.terminalFile[0].originFileObj
@@ -75,7 +76,12 @@ const MonitorTaskModal = memo(
 			showModal: (isShow: boolean, initData?: MonitorTaskParams) => {
 				setIsShow(isShow)
 				setUpdateId(initData?.taskId || 0)
-				initData && form.setFieldsValue({ ...initData, pingInterval: initData.pingInterval ? true : false })
+				initData &&
+					form.setFieldsValue({
+						...initData,
+						locationSwitchStatus: Number(initData.locationSwitchStatus) ? true : false,
+						pingInterval: initData.pingInterval ? true : false
+					})
 				setPingInterval(Number(initData?.pingInterval) || 30)
 			}
 		}))
@@ -127,6 +133,9 @@ const MonitorTaskModal = memo(
 						<Upload maxCount={1} accept='.xls,.xlsx' beforeUpload={uploadExcel}>
 							<Button icon={<UploadOutlined />}>上传设备</Button>
 						</Upload>
+					</Form.Item>
+					<Form.Item label='拉直线开关' required name='locationSwitchStatus' valuePropName='checked'>
+						<Switch checkedChildren='开启' unCheckedChildren='关闭' defaultChecked />
 					</Form.Item>
 					<Form.Item name='pingInterval' valuePropName='checked'>
 						<Checkbox>

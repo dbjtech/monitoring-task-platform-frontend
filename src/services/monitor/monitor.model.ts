@@ -7,6 +7,7 @@ export interface MonitorTask {
 	emails: string
 	adminName: string
 	pingInterval: string
+	locationSwitchStatus: string
 }
 
 export interface MonitorTaskParams {
@@ -16,6 +17,7 @@ export interface MonitorTaskParams {
 	emails: string //监控任务通知人邮箱
 	adminName: string //管理员姓名
 	pingInterval: string //自动ping IV100设备时间周期
+	locationSwitchStatus: string //拉直线开关
 }
 
 export interface MonitorTerminalsParams {
